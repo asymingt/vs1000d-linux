@@ -1,0 +1,20 @@
+MEMORY
+{
+# program space = 12288 = 0x3000 words
+	page 0: rom_prog: origin =    0h, length = 2000h
+		rom_prlp: origin = 2000h, length = 1000h
+		ram_prog: origin = 4000h, length = 4h
+
+# data RAM 6144 = 0x1800 words for both buses
+# data ROM 7168 = 0x1C00 words for both buses
+	page 1:
+		const_x:  origin = 2000h, length =  8192
+                data_x:   origin =    0h, length =  6144
+
+	page 2:
+		const_y:  origin = 2000h, length =  7759
+                data_y:   origin =    0h, length =  6144
+
+	page 3:
+		stdio:    origin = 7000h, length = 2, option = "vsstdio"
+}

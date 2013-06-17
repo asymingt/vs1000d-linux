@@ -1,0 +1,118 @@
+Uartcontrol						v 0.3 20100527
+===========						VLSI Solution Oy
+
+Principle of operation:
+- VS1000 boots from NAND FLASH after getting a pulse to PWRBTN
+- VS1000 runs with a fixed 3.0x clock (to make UART communication robust)
+- UART RX interrupt is used to buffer received characters
+- Normal button control is replaced by commands through UART
+- Status info is sent through UART TX
+
+
+
+1) VS1000 boots and determines is USB is attached,
+   goes to mass storage mode if USB present and sends "a\n".
+   When USB is detached, sends "d\n".
+
+2) Then checks disk contents.
+   If FAT is not present, sends 'not\n' (until turned off or USB attached)
+   if FAT is present, sends 'fat\n', and the fat total size as 4 bytes
+   (high byte first).
+
+3) When FAT is found, lists the root directory contents
+   - Each 32-byte FAT entry is sent prefixed with 'F' for file or 'D' for
+     directory, and suffixed with a new line character '\n' (0x0a).
+     Note that the directory entry contains binary characters and can
+     contain '\n' as well.
+   - The 32 bytes are the FAT directory entry directly containing the
+     8.3-character file name in the first 11 bytes, attribute byte in
+     the next (also contains the directory attribute flag), and file
+     size in bytes 28 through 31 (low byte first).
+
+4) Waits for command:
+   - "L\n" lists the current directory
+
+   - "CDIRNAME \n" enters directory with a specific 8-character name
+     o only first 16 subdirectories per directory are available
+     o directory depth of 32 is allowed
+     o the name must be in uppercase and padded with spaces upto 8 characters
+     o extension is not checked
+     o the selected dir number is returned (as one byte)
+       or 0xff is returned if the directory was not found.
+     o if the directory is found, the contents are displayed (see 3)
+
+   - "cnum\n" enters directory with a specific number, starting from 0
+     o only first 16 subdirectories per directory are available
+     o directory depth of 32 is allowed
+     o example: "c0\n" will enter the first directory
+     o the selected dir number is returned (as one byte)
+       or 0xff is returned if the directory was not found.
+     o if the directory is found, the contents are displayed (see 3)
+
+   - ".\n" returns to the parent directory
+     o '.' is returned (as one byte)
+       or 0xff is returned we already were in the root directory.
+     o if the directory is found, the contents are displayed (see 3)
+
+   - "PSONGNAME\n" plays song with a specific name
+     o the selected file number is returned (as one byte)
+       or 0xff is returned if the file was not found.
+     o when file has been played to the end (or play stopped) "w\n" is returned
+     o Note: currently play by name ignores directories!
+
+   - "pnum\n" plays song with a specific number
+     o Only possible for the first 64 files (names are saved internally)
+     o example: "p1\n" will play the second file in the current directory
+     o the selected file number is returned (as one byte)
+       or 0xff is returned if the file was not found.
+     o when file has been played (or stopped) "w\n" is returned
+
+   - "TFILENAMETXT\n" prints out a file a specific name.
+     o Note: 'T' is followed by exactly 8 characters of filename,
+       in upper-case, and the 3-character suffix without the '.'.
+       If the filename is shorted, it must be padded with spaces,
+       for example "TTEST    TXT\n".
+     o the selected file number is returned (as one byte)
+       or 0xff is returned if the file was not found.
+     o when file has been printed "w\n" is returned
+     o Note: currently print by name ignores directories!
+
+   - "tnum\n" prints out a file with a specific number
+     o Only possible for the first 64 files (names are saved internally)
+     o example: "p1\n" will print the second file in the current directory
+     o the selected file number is returned (as one byte)
+       or 0xff is returned if the file was not found.
+     o when file has been printed "w\n" is returned
+
+   - "OFF\n" turns the unit off
+     o blind addition -- not tested yet
+
+
+5) While playing these single-byte commands are possible:
+   - 'C' -- stop playing, returns 'c'
+     (wait for "w\n" to be returned before giving new dir/file commands)
+   - '+' -- increase volume by 1dB, returns new volume setting (one byte)
+   - '-' -- decrease volume by 1dB, returns new volume setting (one byte)
+   - 'p' -- pause/play toggle, returns 'p' for paused, 'P' for continue play
+   other bytes sent during play mode are echoed and ignored
+
+The Makefile should work with both FreeBSD and Windows if you have
+vskit installed (and don't have another make.exe in your path).
+
+You can use flash.bat to program the boot image, but note that
+because the UART is taken over by the program. For the next
+programming you must power-up or reset the vs1000 board with
+the NAND-FLASH boot jumper (JP15) removed. Then replace the
+jumper after programming to boot the uartcontrol software from
+FLASH.
+
+By default the image for 256MB FLASH is used. Change the flash.bat
+accordingly if you want to use 512MB FLASH instead. (256MB FLASH
+will work with 512MB FLASH, but then you can't use the full FLASH.)
+Programming using flash.bat does not erase the disk content.
+
+
+Fixed for 0.2
+- RealPowerOff() called, powering down should work now
+- command loop uses AudioOutputSamples() so it can not get stuck in pause mode.
+- play commands clear the pauseOn variable when they start playing.

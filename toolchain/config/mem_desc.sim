@@ -1,0 +1,30 @@
+MEMORY
+{
+# program space = 12288 = 0x3000 words
+	page 0: rom_prog: origin =    0h, length = 3000h
+		ram_prog: origin = 4000h, length = 4h
+		return:   origin = 3fffh, length = 1h, option = "quit"       
+
+# data RAM 6144 = 0x1800 words for both buses
+# data ROM 7168 = 0x1C00 words for both buses
+	page 1:
+                data_x:   origin =    0h, length =  6144
+		const_x:  origin = 2000h, length =  8192
+		pshad_x:  origin = 8000h, length = 12288
+		spi:      origin = 4000h, length =   256
+		data_in:  origin = 4100h, length =     1, option = "<bitstreams/layer3.ascii"
+#		data_in:  origin = 4100h, length =     1, option = "<mp3/Short_s_44_128.ascii"
+		dreq:     origin = 4101h, length =     1
+		data_ol:  origin = 4200h, length =     1, option = ">l.txt"
+		data_or:  origin = 4201h, length =     1, option = ">r.txt"
+		data_rat: origin = 4202h, length =     1, option = ">rate.txt"
+		int_en:   origin = 4300h, length =     3
+
+	page 2:
+                data_y:   origin =    0h, length =  6144
+		const_y:  origin = 2000h, length =  8192
+		pshad_y:  origin = 8000h, length = 12288
+
+	page 3:
+		stdio:    origin = 7000h, length = 2, option = "vsstdio"
+}

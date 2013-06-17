@@ -1,0 +1,1197 @@
+===========================================================================
+20101112
+	Distribution v1.30 -- free version (restricted VCC)
+---------------------------------------------------------------------------
+20101112
+	vslink: creates mem_desc.available with available memory areas
+		if linking succeeds.
+
+20101112
+	vcc: debug symbols and large code/data memory generation enabled
+		in all versions.
+
+20100618
+	vcc: backend optimizer jump condition reversal could cause dead
+		code to become un-dead. (fixed)
+
+20100202
+	vs3emu: purges RX buffer before sending 0xef, when used with
+		vs10xx and vs1000.
+
+20090609
+	vslink: keeps the memory areas in the same order they appear
+		in mem_desc when blocks get divided. Also removes empty
+		areas.
+
+20090217
+	vcc: __align keyword supported in the compiler.
+
+20080430
+	libcv4: iterative log2() is faster, smaller, and more consistent than
+		old log(). log10() and log() implemented using log2().
+		50 words, ~480 cycles, 28 to 31 bits of accuracy.
+20080430
+	vss: recursive functions profiled better.
+
+20080404
+	vslink: already allocated sections (paddr!=0) use absolute allocation.
+
+20080207
+	vcc: backend opt. sometimes moved "ldc 0,b1" above "mv b2,c0". (fixed)
+
+20071220
+	vcc: backend optimizer fix for cases with a lot of register moves.
+
+20071219
+	vcc: (s_int32)sum * (s_int32)tmp_fb  with long sum and
+	     unsigned short tmp_fb the multiplication signs were wrong.
+	     Result could be wrong in overflow situations. (fixed)
+
+20071113
+	vcc: in indirect structure field reference a 32-bit return register
+		overlapped an excluded register. (fixed)
+
+20071102
+	vcc: if volatile expressions were cast into a non-volatile types,
+		they could be reused later. (fixed)
+
+===========================================================================
+20070712
+	Distribution v1.20 -- free version (restricted VCC)
+---------------------------------------------------------------------------
+20070628
+	vslink: -S strips off section datas (makes them bss) and reloc info
+		to allow distribution of debug information without releasing
+		the actual rom code.
+
+20070502
+	vcc: bitfield assignment problem fixed.
+		(struct {int f1:3; int f2:1;}fuu;
+		 fuu.f2=1; fuu.f1=1;
+		 --> -1 was assigned to f1 because f2 assignment returned -1.)
+
+20070328
+	libc: 16-bit signed and unsigned divisions now use fast
+		iterative (guess and one iteration) algorithms.
+
+20070223
+	vcc: constant evaluation of signed division/modulo made consistent
+		with non-constant division/modulo. (e.g. -5/2)
+	vcc: backend bug with complex loops fixed
+
+20061201
+	vcc: NOP removal done twice per round, number of optimization
+		rounds added.
+
+20061025
+	vss: fixed the new multijumptarget profiling
+
+20061020
+	vcc: (*Xh).r = re; followed by (*Xh).i = im; mixed address
+		offsets of two different indirection levels. (fixed)
+20060926
+	vcc: (*Xh).r followed by (*Xh).i added field offset to Xh address
+		and not to the *Xh value. (fixed)
+
+20060818
+	vss: profiling now includes function pointer calls also (averages).
+
+20060613
+	vcc: a complex code generation bug fixed.
+
+20060403
+	vcc: bitfields sometimes did not access Y memory when they should.
+		(fixed)
+
+20060323
+	vcc: switch with only a default: was generated wrong. (fixed)
+
+20060120
+	vcc: problems with const/static in typedefs containing arrays fixed.
+
+20051014
+	vcc: optimizer: redundant stack save detected uncorrectly. (fixed)
+
+20050908
+	vcc: optimizer: alias detection in moving loads backwards
+		didn't always work. (fixed)
+
+20050815
+	vcc: added __builtin_swap() to swap double-word halves.
+
+20050727
+	vcc: "str.field" is an lvalue if "str" is an lvalue, even if
+		"field" is an array.
+
+	vcc: optimization of "and null,null,b0 + or a1,b,a"
+	     generated "or a1,b1,a", which is invalid. (fixed)
+
+20050218
+	vcc: a bug in loop optimization fixed. Problem with
+		loop ...
+		nop
+		ldx (i2)+1,a0 ; ldy (i2),a1
+
+20040914
+	vcc: -fcase-in-i allows switch-case jump tables to be put in
+		instruction memory instead of X for VSDSP4.
+
+20040511
+	vcc: (e ? x : y) = 1; did not work as expected. (fixed)
+
+20040423
+	vcc: fixes to fractional constant multiplications and casts.
+
+20040126
+	vcc: short*short*float treated short arguments as float. (fixed)
+
+	libc: double->__fract short saturated the value to [-0.5..0.5).
+		(fixed)
+
+20031223
+	vcc: skipping of type casts in multiplication for fractional types
+		is not allowed.
+
+	vcc: .a -output of packed strings fixed
+
+20031126
+	vcc: pointer assignments and pointers as parameters did not check
+		the element types correctly. (fixed)
+
+===========================================================================
+20031114
+	Distribution v1.16 -- free version (restricted VCC)
+---------------------------------------------------------------------------
+20031113
+	vcc: optimization should not move "ldc Label,LR0". (fixed)
+
+20031029
+	vcc: optimization fix: "auto" functions do change I6 so do not
+		optimize "ldx (i6)+1,null" away. (fixed)
+
+20031023
+	vcc: a relocation bug with far addresses and -g fixed.
+
+20030822
+	vcc: struct assignments inside for-loops that became hardware
+		loops did not restore the loop count register correctly.
+		(fixed)
+
+20030818
+	vcc: 32-bit access failed if no index register pairs were free,
+		the return value was requested in an index register and
+		the register pair allocated for the access overlapped
+		the return value register. (fixed)
+
+20030811
+	libc: rand() has new constants and should give better
+		pseudo-random sequence.
+
+	vcc: some problems with array indexing with structure
+		fields and indirections fixed.
+		("ptr[xx].field->other", "(ptr+xx)->field->other",
+		 and the equivalent version "(*(ptr+xx)).field->other")
+		Workaround: "ptr+=xx;ptr[0].field->other" or use a
+			temporary variable "tmp=ptr[xx].field;tmp->other"
+
+20030627
+	vcc: indentical string literals are now generated only once.
+		Strings that initialize arrays are not affected.
+
+20030625
+	libc: df_sub was broken in the 1.15 library.
+		The 1.14b df_sub did not handle 0.0-1.0 (double d = 1.0; d=-d;)
+		right: the result was not correctly normalized. (fixed)
+
+	vcc: a string could be generated twice if used in a while()
+		loop expression that has or could have side effects. (fixed)
+
+20030603
+	vcc,vslink,vss,VSIDE:
+		debug information for static and global variables now
+		generated in a way which works. The scopes of static
+		variables are now correct.
+
+		File-scope is not yet implemented in the simulator, so
+		if you have static variables with the same name in multiple
+		files, you will only be able to access the one which was
+		first linked.
+
+	vss,VSIDE:
+		Step into, step over, and step out are now implemented in
+		the simulator. Simulation can also be paused at any time,
+		even during the step out execution.
+
+20030528
+	vcc: packed strings ("\pfuu") did not work correctly without
+		the debug information and direct COFF generation. (fixed)
+
+20030527
+	libc: *printf added to 16-bit libc.a . Also, _emuser.o was
+		removed, and thus chip-specific functions
+		getch, putch, getword, and putword must be provided
+		if stdio functions are used with an actual chip
+		(note that you also need the emulator, you cannot
+		 normally use stdio in production code).
+
+20030522
+	vcc: if a pointer to a __y structure was passed as a parameter,
+		assignments to fields that were pointers to __x wrote
+		the values to X memory instead of Y. (fixed)
+
+20030514
+	vcc: if a signed type was divided by a constant 2^n, the
+		division was sometimes done in unsigned mode. (fixed)
+
+20030503
+	vcc: if an unsigned type was cast into a longer signed type,
+		a multiplication used the wrong signedness (signed
+		instead of unsigned) in the reduced-width multiply. (fixed)
+
+20030425
+	libc: libc32 printf() now allows %b and %lb formats for binary
+		format.
+
+20030314
+	libc: signed division routines now round down, and the remainders
+		are also correct.
+
+20030313
+	vcc: pointers to different pages in structures do not work if
+		you access them using the '*' unary operator, but work
+		if you access them with the [0] indexing operator. (fixed)
+
+20030310
+	vcc: more expressions are detected as constant expressions for
+		initializers, for example:
+		const char *const s1 = "hello world";
+		const char *const s2[] = { s1, 0 };
+
+===========================================================================
+20030307
+	Distribution v1.15
+---------------------------------------------------------------------------
+20030305
+	vcc: unsigned long long and long long literals (1ULL, 1LL) are
+		understood, although if the value does not fit into
+		32 bits, the "invalid number" error is generated.
+
+	vcc: '"' is now accepted as a character constant.
+
+	vcc: array dimension checking allowed indexing of the first
+		'missing' element without warning. (fixed)
+
+	vcc: stack string variables initialized with memcpy instead of
+		strncpy. Zero-fills the uninitialized portion.
+
+	vcc: now correctly truncates expression value when it was
+		assigned into a bitfield: v = (s.bit10 = 123);.
+
+20030228
+	vcc: inline, __inline, and __inline__ are detected and ignored.
+
+	vcc: *--p = expr; assignment used wrong address. (fixed)
+
+	vcc: better 32-bit unsigned arithmetic emulation with 40-bit
+		registers: up-shifts now update the guard bits.
+
+	vcc: large constant number of loops overflowed. (fixed)
+
+	vcc: when the number of loops was 1, still set LE register. (fixed)
+
+	libc: fixed remainder in signed division routines, but div16s and
+		div32s still use round toward zero instead or round to lower.
+
+	libc16: some of the string and memory functions used a register they
+		did not save. (fixed)
+
+20030227
+	vcc: bug in incompletely bracketed structure initializers fixed.
+
+20030226
+	vcc: expression "constant == value" became "value != constant". (fixed)
+
+	vcc: __FUNCTION__ gives a string containing the function name.
+
+20030213
+	vcc: variables declared as extern now have the right scope, even
+		if declared in inner scopes.
+
+20030211
+	libc: 32-bit fractional division (fr_div32) handled stack pointer
+		incorrectly when the division overflowed. (fixed)
+
+20030131
+	vcc: a null-pointer reference was generated with the comma-operator
+		if an output register allocation was delayed. (fixed)
+
+	vcc: automatic error recovery in parse phase did not work quite
+		right, so it was disabled for now. This can cause more
+		nonsense parse errors to be reported, but does not
+		make the compiler enter an infinite loop.
+
+	vcc: constant merging does not handle different constant types,
+		which causes problems in cases when differently-sized
+		constants are used in an expression. (disabled until fixed)
+
+	vcc: hex character constants handled only upper-case hex digits
+		correctly. (fixed)
+
+	vcc: an optimizer bug causes long unsigned shifts to be treated
+		as if they were signed, which exhibits itself when the
+		barrel shifter is in use (core versions >= 3). (fixed)
+
+20030130
+	vcc: long filenames caused overflows in the CPP invocation. (fixed)
+
+20030114
+	vsa: 32-bit addressing (double index) with LDI/STI is not allowed.
+
+20021218
+	libc: libraries for core version 3 is now included in the
+		vskit package in directories libc16_v3 and libc32_v3
+		(compiled with -floopflagbug).
+
+20021122
+	vcc: pointers to typedef'ed structures had trouble propagating
+		the __y specifier correctly when used as a parameter
+		(parameters are always implicitly in __x). (fixed)
+
+===========================================================================
+20021120
+	Distribution v1.14b
+---------------------------------------------------------------------------
+20021120
+	vcc: elimination of identical LDC's left a reference to a label
+		(if the constant pointed to a label), which caused too
+		early deallocation in cleanup.
+
+===========================================================================
+20021119
+	Distribution v1.14
+---------------------------------------------------------------------------
+20021108
+	libc: strtod() and atof() (macro) added to stdlib.
+
+20021107
+	vcc: an optimizer bug with some loop constructs fixed.
+		(Loops inside loops without loop hardware and
+		 the loop counter was a register variable.)
+
+20021106
+	vcc: -floopflagbug generates code so that the loop flag will be
+		cleared in case someone has left it set. Makes some
+		functions one word longer.
+
+20021031
+	vcc: structure assignment to Y memory did not always work, but
+		wrote to X memory instead. (fixed)
+
+	vcc: structure or union return values from functions can only be
+		assigned to variables that are located in X memory.
+		(error 290 added)
+
+20021030
+	libc: strtol() and atoi() added to libc16 and libc32
+
+20021023
+	vcc: uses the barrel shifter more for core versions >= 3.
+
+20021018
+	vcc: instruction "sub ones,xx,yy" (xx and yy are short registers)
+		not used.
+
+20021014
+	vsa: label difference expression did not work correctly if it was
+		part of another expression, e.g. (label1-label2)-1. (fixed)
+
+20021008
+	mkabs: possibility to create COFF-typed symbols, example:
+		_AddHead=0x4020:FCN/VOID	is "void AddHead();"
+		_RemHead=0x4026:FCN/PTR/VOID	is "void *RemHead();"
+		_Wait=0x405c:FCN/USHORT		is "unsigned short Wait();"
+
+20021003
+	vcc: shift quantity is always handled as short. Some problems with
+		this fixed.
+
+20021001
+	vcc: indicator for from which register flags have been evaluated was
+		not cleared for some floating point functions, causing some
+		comparisons to fail. (fixed)
+
+20020930
+	vcc: when a pointer is cast into a pointer to a different memory,
+		the pointer value could be read from wrong memory in a
+		subsequent access. (fixed)
+
+20020925
+	vcc: indexing a __near array with a long index did not
+		always invalidate one expression. (fixed)
+
+20020912
+	vcc: promotion for "unsigned int" + "long" created a result of
+		"unsigned long" instead of "long". (fixed)
+
+===========================================================================
+20020903
+	Distribution v1.13	-- with SunOS 5.8 version
+---------------------------------------------------------------------------
+20020814
+	vcc: return 0; in an unsigned function no longer generates
+		a warning about different signedness.
+
+20020813
+	vcc: one ptr[constant] -> ptr[constant] was not fixed properly.
+		(see 20020110) now fixed.
+
+20020724
+	libc: the modf() macro replaced with a function. The new modf()
+		is faster and can handle larger numbers than the old macro.
+		The old modf() macro can be used with _oldmodf() if some
+		of your code depends on the old behaviour, i.e. larger
+		than MAX_LONG values were saturated, in which case the
+		fractional part became >1.0 .
+
+	libc32: *printf() was reduced in size to 1729 code words.
+		tiny*printf(), which lacks the floating point support
+		was reduced to 1152 code words.
+
+20020722
+	COFF: COFF string section reallocation sometimes didn't increase
+		the memory block size enough. (fixed)
+
+20020620
+	vsa: MIN_LONG (-2147483648) became 0x80000001 instead of
+		0x80000000. (fixed)
+
+20020619
+	vcc: automatic conversion in the compiler of the form
+		"double aa = 0x80000000UL;" caused aa to become negative.
+		(fixed)
+
+20020617
+	vcc: one RegSetExpr() was missing in the constant multiplication (x3).
+		(fixed)
+
+20020612
+	vcc: Windows version now writes the temporary preprocessed file
+		to the current working directory, instead of relying on
+		tmpnam(), which with VisualC++ gives file names that are
+		in the root directory.
+
+	vcc: a bug in the expression invalidation in function calls
+		fixed.
+
+20020611
+	vcc: only 16 _consequtive_ pointer indirections were allowed in
+		type declarations. 32 are now allowed and error is
+		generated if the user tries to declare more.
+
+	vcc: some memory problems in the optimizer corrected. (fixed)
+
+	libc: fixes to floating point arithmetic and to some seldom-used
+		conversion functions.
+
+===========================================================================
+20020514
+	Distribution v1.12
+---------------------------------------------------------------------------
+20020404
+	vcc: if a short register pointer variable was accessed as a long
+		pointer, generated an invalid register move instruction.
+		(fixed)
+
+	vcc: -fusejmpi allows the use of the JMPI instruction for
+		calls to __near functions.
+
+20020307
+	vsa: COREVERSION can now be used to detect the hw_desc core version.
+
+20020306
+	libc: tolower/toupper return address fixed.
+
+20020218
+	vcc: pointer[constantindex] -> pointer[anotherconstantindex]
+		optimization did not preserve the y-page flag. (fixed)
+
+20020214
+	vcc: partial support for packed string literals added. See the
+		tools manual for details.
+
+20020204
+	vcc: sometimes when all registers were allocated and an expression
+		to be evaluated was found in a register, overlapping
+		argument registers could be allocated for binary
+		operations. (fixed)
+
+===========================================================================
+20020124
+	Distribution v1.11	-- with W95/W98/NT/W2k version
+---------------------------------------------------------------------------
+20020121
+	vcc: constant expression elimination evaluated x/100/10 as x/(100/10)
+		(i.e. x/10) instead of x/1000. (fixed)
+	vcc: constant load elimination in backend optimizer could sometimes
+		change constant values. (fixed)
+
+20020110
+	vcc: pointer[constantindex] -> pointer[anotherconstantindex]
+		failed for other type sizes than 1 (e.g. double). (fixed)
+
+20011217
+	vcc: ++a; pre/postmodification for double increased the mantissa
+		by 1 instead of value (for float increased the exponent).
+		(fixed)
+
+20011214
+	vcc: if an empty loop was eliminated, loop end register was
+		still set to -1 but not saved/restored. (fixed)
+
+20011211
+	vsa: if a data section had both initialized data and .bss, and the
+		last data was .bss and larger than 1, the section size was
+		incorrectly calculated. (fixed)
+
+20011210
+	vcc: a couple of words of stack is saved for functions without
+		stack parameters that do not return (e.g. while(1);).
+
+20011015
+	vcc: __near versus __far checks improved.
+
+20011008
+	vcc: 32-bit pointer + scalar addition did not handle all object
+		sizes. (fixed)
+
+20010905
+	vcc: bug fix for "val -= constant", when val is in index register.
+
+20010904
+	vcc: EXTERN and STATIC flags cleared for function parameters.
+
+	libc32: strtol(), *printf() and a primitive version of sscanf()
+		were added.
+
+20010824
+#	vcc: JMPI is again used. A NOP is automatically generated after
+#		each use to make certain that JMPI delay slot (which
+#		is ignored in execution, but used in loop end checking)
+#		does not cause loop count to be decremented too many
+#		times. Using JMPI for far->near function calls takes
+#		now 4 instructions and 4 cycles, which is one less than
+#		using the full 32-bit function call. (disabled)
+
+	vcc: a register variable is not changed when values are written
+		to memory (indirection operations), thus no need to
+		invalidate such register contents in assignments.
+
+20010725
+	vcc: when a lot of registers are in use and a __far double
+		is accessed, the address of the double and the
+		exponent part can sometimes overlap. Currently an
+		error message is generated. ()
+
+20010629
+	vcc: in some cases register invalidation did not work correctly
+		and an old value was used in an expression. (fixed)
+
+	vcc: some multiword variable reads/writes did not clear a
+		flag, which made some comparisons with 0 fail. (fixed)
+
+		Note: "if (d-df < 0)" may give different results than
+		"if (d < df)", because in the first case "d-df" is
+		evaluated first, discarding possible overflows, and
+		then compared to zero, whereas the latter directly
+		compares d and df.
+
+20010619
+	vcc: JMPI is no longer used in function calls so that JMPI
+		'delay slot' is not located in a loop end address.
+
+20010618
+	vcc: __builtin_ldexp did not handle 0.0 correctly. The exponent
+		was changed and thus made this value not equal to the
+		"genuine" 0.0. This made asin() and acos() fail on
+		argument values 1 and -1. (fixed)
+
+	vslink: modemask comparison in core parameter checks was removed.
+
+	vcc: ranges added to -w, -W, -p, and -P options. You can now
+		say e.g. -w24-27
+
+===========================================================================
+20010608
+	Distribution v1.10
+---------------------------------------------------------------------------
+20010607
+	vcc: option -P and -p added. These can be used to promote
+		warnings into errors and demote them back to warnings.
+
+20010606
+	vcc: the constant -2 no longer generated in ALU (add ones,ones,xx).
+
+20010531
+	vcc: some double type register allocation problems fixed.
+
+20010515
+	libc: a problem in the double->long conversion (-1.0 became 0) fixed.
+
+20010510
+	vcc: binary constants allowed: 0b0101001.
+
+20010321
+	vcc: if a structure or union contained incomplete types, the
+		size of the structure was incorrectly calculated.
+
+20010312
+	vcc: "far_ptr - short" was handled incorrectly (the short value
+		was erroneously cast into a pointer type -> pointer
+		difference was generated). (fixed)
+
+===========================================================================
+20010309
+	Distribution v1.9
+---------------------------------------------------------------------------
+20010308
+	vcc: a problem with far and Y-memory accesses in the optimizer
+		fixed.
+	vcc: a warning is generated for non-void functions that do not
+		return.
+
+	coff2lod: "-bc none" does not wait for a character before
+		sending data. In ascii mode ("-a") "-end str" waits
+		for "str" from the serial and then exits (the string
+		size is restricted to 8 characters).
+
+20010301
+	vcc: a small optimization addition.
+	vcc: Function epilog and register save is not generated for
+		functions that do not return, e.g. main loops.
+
+20010214
+	vsemu: "-ts" now works with "-pem" also. Serial dividers are
+		now calculated instead of picked from an array.
+
+20010213
+	coff2lod: "-ts" now works with "-c pem" also. Serial dividers
+		are now calculated instead of picked from an array.
+		Option "-q" added for quitting coff2lod after the
+		execute command has been sent and one byte has been
+		received from the chip.
+
+20010206
+	vcc: register restore in the wrong place caused far-structure
+		assignments to mess the stack pointer if an index-register
+		pair was not available. (fixed)
+
+20010205
+	vcc: signed comparisons other than equal/non-equal with the
+		constant zero failed if the expression was already in a
+		register, and the flag register was set according to
+		the value of that register. 'Old' flags can only be used
+		with conditions using zero and negative flags, not signed
+		and unsigned comparisons that use carry or overflow
+		flags also. (fixed)
+
+20010130
+	vslink: identical absolute symbols are now allowed to be linked
+		together.
+
+20010116
+	vsomd: can now be used to disassemble archive files also.
+
+20010104
+	libc: rand() gives quite non-random values, random()/srandom()
+		was added to stdlib. Rand() was not simply replaced,
+		because random() gives larger pseudo-random values
+		(0..RANDOM_MAX) and is a slower routine.
+===========================================================================
+20001228
+	Distribution v1.8
+---------------------------------------------------------------------------
+20001228
+	HTML version of documentation is no longer included.
+
+	vcc: unsigned division/modulo by a constant other than a power
+		of two disabled, because some of the results for values
+		larger than 32767 were wrong for some dividers.
+
+20001211
+	vsemu,coff2lod: -bc option can be used to set the boot character
+		that is expected from the chip in reset. "-bc any"
+		allows any value.
+
+20001130
+	vcc: an optimizer bug fixed (a move from fallthrough was confused
+		if there were a lot of LDC instructions).
+
+20001121
+	vcc: The indirection operator (*x) did not always read the value
+		from the right memory. (fixed)
+
+20001116
+	libc16: memcpy (memmove) register save fixed.
+	libc16: memcpyXY, memcpyYX, memcpyYY added.
+
+20001110
+	vcc: chained jumps in switch-case eliminated also when a
+		jump table is used (case 1: break; case 2: goto again;).
+
+20001020
+	vcc: an optimizer bug fixed.
+
+20001013
+	vcc: if -fsmall-code is specified, makes all __far functions
+		automatically __near.
+
+	libc16: stdio now works again with vsemu.
+
+20001005
+	vslink: linking is now much faster with a large number of
+		sections. An executable with 1000 sections was
+		previously linked in 1 minute 45 seconds, now it
+		only takes 6 seconds to link it.
+
+20000928
+	vsar,vslink: if byte order swap was performed when reading a
+		COFF file from a library, writing (vsar/vslink) and
+		rereading the file would mess up the byte order. (fixed)
+
+===========================================================================
+20000928
+	Distribution v1.7
+---------------------------------------------------------------------------
+20000927
+	vcc: if a function parameter had the __y flag (either explicit or
+		implicit) and its address was found in a register, it was
+		erroneously manipulated in Y memory instead of X. (fixed)
+
+20000920
+	vcc: when stack variables were automatically turned into __near
+		variables, array element storage was not changed even
+		if the storage of the array itself was changed. This
+		caused problems in pointer-generation ("fuuPtr = &fuu[0]"
+		worked while "fuuPtr = fuu" failed when fuuPtr was a
+		32-bit pointer and fuu was a stack variable). (fixed)
+
+20000915
+	vcc: bitfield assignment did not invalidate the temporary register.
+		(fixed)
+	vcc: strncpy() is used to copy string initializers but it had
+		been changed into a far function in the library without
+		changing the code generation. (fixed)
+
+20000905
+	vcc: pointer specifiers in type definitions which had multiple
+		consequtive pointer specifications were reversed, i.e.
+		void * __far * __near var; created a far-storage pointer
+		to a near pointer instead of a near-storage pointer to a
+		far pointer. (fixed)
+
+20000904
+	vssym: now handles link libraries also.
+
+20000901
+	vslink: erronously allowed linking of data_x and data_y to far
+		memory. Bug introduced 20000703. (fixed)
+
+20000831
+	vcc: mixed-width pointer + integral addition was broken --
+		it cast the integral type into a pointer type, and the
+		pointer scaling factor was not taken into account. (fixed)
+
+	vsemu: VS28030-support uploaded code incorrectly. (fixed)
+
+20000825
+	vcc: now generates initialized strings in far-pointer initializers
+		to far data section.
+
+20000824
+	vcc: better checks the usage of __near vs. __far in function
+		prototypes and definitions.
+
+===========================================================================
+20000822
+	Distribution v1.6
+---------------------------------------------------------------------------
+20000822
+	vcc: f32xf32-bit multiplication allocated a short register if
+		it run out of (non-overlapping) registers. (fixed)
+
+	vcc: no longer supports core version 1.
+		This is because some of the code generation is already
+		broken, i.e. uses the new instructions without checking
+		the core version.
+
+20000817
+	vcc: 32x32-bit multiplications did not invalidate register values
+		correctly. (fixed)
+
+20000816
+	vcc: You can now use "extern" in inner scopes also. Previously
+		any variable marked as extern in inner scopes became
+		a stack variable.
+
+20000815
+	vcc: "struct struct" etc. no longer allowed.
+		"typedef int field; strct.field" allowed.
+
+20000808
+	vcc: some structure field calculation from already available
+		expressions fixed.
+
+20000807
+	vcc: one constant load elimination optimization fixed.
+
+	vcc: error is generated also if no arguments are specified for
+		a function requiring parameters.
+
+20000804
+	vsa: no longer allows sty/ldy with double-index addressing mode.
+		"sty a0,(i1:i0)" was actually encoded as "stx a0,(i1:i0)"
+
+20000703
+	vcc: fractional multiplications with integral values changed
+		back to the original behavior. Shifting up and taking
+		the upper part of the result is only performed when both
+		values are fractional. In this way, when a fractional value
+		is multiplied with an integral value 2, the value is doubled.
+		Also, the fract16*int32->fract32 multiplication previously
+		gave a result 65536 times too small. (fixed)
+		For fractional multiplications, use either
+			f32_w = (__fract long)13408963 * f32_x;
+		or
+			f32_w = 0.00624403497204185 * f32_x;
+
+	vslink: skipping the start of a memory block didn't work
+		when allocating far code memory (page boundary can
+		not be crossed and sections with LOOP instructions
+		can not be allocated in the start of the pages). (fixed)
+
+===========================================================================
+20000630
+	Distribution v1.5
+---------------------------------------------------------------------------
+20000629
+	vcc: small improvements in the code generation and optimization.
+
+	vcc: after a function call expressions that can not change are
+		not invalidated (register variables, local variables
+		that have not had their addresses taken, variable addresses,
+		constants, and the combinations of these).
+
+20000627
+	vcc: all registers are now invalidated after a function call.
+		Todo: be more clever about it. (see 20000629)
+
+20000622
+	vsemu: changes to partly support VLSI's GPS chips (VS28030).
+		Note that you also need the corresponding monitor program.
+
+20000620
+	vcc: function().field mishandled the stack a bit so that an
+		interrupt occurring at the "right" moment could
+		corrupt the value. (fixed)
+
+20000619
+	vcc: now a multiplication is performed as fractional if either
+		argument is fractional.
+		Note: fr * 2 no longer doubles the fractional value.
+			Use fr << 1 instead.
+		Note2: this will be changed back to the older behavior
+			(see 20000703).
+
+	vcc, libc: fractional divisions added (Q15/Q15->Q15, Q31/Q31->Q31).
+		The dividend must be less than the divisor, the result
+		is fractional. Note also that only signed fractional numbers
+		are currently supported.
+
+20000615
+	vslink: a problem with relocation crossing a page boundary fixed.
+
+20000614
+	libc: unsigned long->double conversion returned a value which
+		was 65536 times too small. (fixed)
+
+20000602
+	vcc: structure and union assignment now allows the assignee
+		to be in a different page than the assigner.
+
+20000530
+	vcc: function().field did not invalidate the result register
+		as it should, thus sometimes an expression was used
+		although it wasn't valid anymore. (fixed)
+
+20000525
+	vsa: the section name can now also be any of the otherwise
+		reserved words like 'add' or 'halt'.
+
+===========================================================================
+20000524
+	Distribution v1.4	-- C compiler fixes
+---------------------------------------------------------------------------
+20000524
+	vcc: in some cases the selection-operator '?' returned a truth-
+		value instead of returning the actual numeric value. (fixed)
+
+20000523
+	vcc: jump condition reversal bug fixed (an obsolete op_jump must be
+		deleted or it breaks some other optimizations).
+
+20000522
+	vcc: if a structure type was typedef:ed before it was defined,
+		the size of the typedef type stayed zero. (fixed)
+
+	vcc: '?:'-operator did not honor the lvalue-flag, which caused
+		e.g. structure assignments to use the structure contents
+		as addresses. (fixed)
+
+20000518
+	libc: va_start in stdarg.h did not work with 32-bit args. (fixed)
+
+	vcc: __far functions now put their switch() jump tables into
+		const_x_far section.
+
+20000517
+	vcc: unsigned-to-double and unsigned-to-float conversions did not
+		work for upper half of the values. (fixed)
+
+20000516
+	vcc: sometimes a typedef/enum type was not properly allocated/copied.
+		(fixed)
+
+20000515
+	vcc: if in IF there was an empty then-branch, but something in the
+		else-branch, the if expression was incorrectly omitted. (fixed)
+	vcc: binary bitwise operations still sometimes generated incorrect
+		code. (fixed)
+
+===========================================================================
+20000509
+	Distribution v1.3	-- mainly C compiler fixes
+---------------------------------------------------------------------------
+20000508
+	vcc: one code generation problem with binary bitwise operations
+		fixed.
+
+20000505
+	vcc: sometimes a structure field bitfield value before the masking
+		was not properly invalidated. (fixed)
+
+20000502
+	vslink: some memory allocation problems with 32-bit code and
+		sections containing loops fixed.
+
+20000426
+	vcc: "unreachable code" warnings added for while and do-while.
+
+	libc: double->int/short conversion routine did not work with
+		minimum negative mantissa, e.g. -1.0, -2.0, etc. (fixed)
+
+20000425
+	vcc: fractional 32x32 multiplication now provides full 32 bits
+		of accuracy. (10 cycles instead of 9)
+
+20000420
+	vcc: fractional 16x32 multiplication now provides full 32 bits
+		of accuracy. (8 cycles instead of 7)
+
+20000419
+	vcc: if structure/union return values were not used, they were not
+		ignored like they should've, which corrupted memory. (fixed)
+
+20000414
+	vcc: if a for-statement didn't have a body and had side
+		effects in the loop condition, that expression was
+		not evaluated before the loop update expression as
+		it should've been. (fixed)
+
+20000410
+	vcc: returning structures from a parameterless function
+		didn't work. (fixed)
+	vcc: if the code generator run out of registers in function
+		calls, a lot of weird effects were generated.
+		Changed the code generation a bit to make it less
+		probable and added a check for the case (an error is
+		generated, which is better than generating incorrect
+		code). (fixed)
+
+20000408
+	vcc: returning function's structure return value,
+		i.e. "return structFunc(params);" did not work. (fixed)
+		Mixed-width pointer-addition-assignments (+= and =-)
+		corrupted the high-part of the address in some cases. (fixed)
+
+20000407
+	vcc: indirect structure references incorrectly used the same
+		register for address and data when both were 32 bits. (fixed)
+
+20000405
+	[vsemu: uploading larger than 32k data sections didn't work
+		correctly and jammed the protocol. (fixed)]
+
+20000328
+	vcc: pointers to volatile structures did not copy the 'volatileness'
+		in indirect structure references (structPtr->field). (fixed)
+
+20000327
+	vcc: a bug occurring in function parameters that are pointers
+		to typedefs with -fhuge-data fixed. (fixed)
+	vcc: sometimes an old expression with a constant offset was used
+		as-if it didn't have the offset. (fixed)
+
+20000323
+	vcc: <<= and >>= with index register variables fixed.
+
+20000322
+	vcc: unsigned division(/modulo) and right-shifts in
+		constant-expression evaluation fixed.
+	vcc: mixed-sized pointer add/sub fixed (32-bit + 16-bit).
+
+20000321
+	vcc: one optimization bug fixed.
+
+20000320
+	vcc: fixed a bug with typedeffed arrays inside structures with
+		32-bit addressing when used only with -fhuge-data.
+	vcc: pointer-generation with flow-control conditionals was
+		broken. (fixed)
+
+20000317
+	[vsemu, coff2lod:
+		removed the I/O setup some old cards needed for booting.]
+
+===========================================================================
+20000316
+	Distribution v1.2	-- you can now use the double type
+---------------------------------------------------------------------------
+20000316
+	libc16 and libc32: almost complete math.h is now available
+
+20000310
+	vslink: now adds also unreferenced ABS symbols from all
+	        'direct' object files (not from library objects).
+
+	coff2lod: now supports the target-speed option (-ts).
+
+20000303
+	vcc: 32-bit indirect structure references became 16-bit (fixed).
+	     -fhuge-code and -fhuge-data did not work quite correctly (fixed).
+	     An error in the structure assignment fixed.
+
+20000228
+	vcc: new optimizations added. 32-bit addressing in function
+	     calls with structures fixed.
+
+20000223
+	vcc: unary + fixed.
+
+20000218
+	vcc: some 32-bit code generation fixed.
+
+20000215
+	vcc: function epilog changed. It is now 2 words shorter
+	     and can be better optimized.
+
+20000207
+	libc16: double addition/subtraction preserves one extra
+	        mantissa bit if the result needs to be normalized.
+
+20000204
+	vssim: the profiler output now also has an approximate call
+	       graph and cycle count for functions. Only approximate,
+	       because some library functions use fallthrough and
+	       cycle counts for these kind of routines are not correct.
+
+20000203
+	vcc: backend code optimizer sped up by 30%.
+
+20000131
+	vcc: initializing a structure/union with a structure/union
+	     (struct FOO f1 = f2;) was not allowed in the type module's
+	     initializer checks although correct code was generated.
+	     Bitfield assignment sometimes tried to use an arithmetic
+	     register for addressing.
+
+20000126
+	vcc: two code generation fixes for double variables.
+
+20000124
+	vcc: indirect calls with constant addresses e.g. var.field(); fixed.
+	     Code optimizer fix (SUB B,P,B and MULSU B0,A0 may NOT be
+	     combined into MSUSU B0,A0,B).
+
+20000123
+	vcc: unsigned greater-than and comparison with the constants
+	     1, 0, and -1 fixed. One optimization in backend code
+	     optimizer fixed. Builtin-functions frexp() and ldexp()
+	     fixed.
+
+20000117
+	vcc: union initializers now work. Register size mismatch in
+	     op-assigment fixed. double-type return values fixed.
+	     The double-type arithmetic link library reviewed.
+	     frexp() and ldexp() builtins added. Typecast code
+	     generation with double/float fixed.
+
+20000113
+	vcc: double and float multiplies with power of two constants
+	     do not call f_mul or df_mul anymore. The exponent is
+	     directly modified instead.
+
+20000111
+	vcc: now tries to preserve more expressions over assignments.
+	     Because of this some code may use unnecessarily many
+	     registers. The option "-fpreserve-regs" restores the
+	     older behavior. The option "-frearrange" was removed.
+
+	vcc: double and float constants with values of power of 2
+	     are now generated correctly. Float divisor and dividend
+	     were switched (fixed). Code generation for double multiply,
+	     add/sub, and divide modified.
+
+===========================================================================
+20000107
+	Distribution v1.1
+---------------------------------------------------------------------------
+
+19991230
+	vcc: a register wasn't invalidated correctly in pointer addition
+	     (fixed)
+	vcc: 16x32- and 32x16-bit fractional multiplies were bugged (fixed)
+19991220
+	vcc: "*<address> = <expr>" sometimes accessed the wrong memory
+	     (Y instead of X). This bug has not been in released versions.
+	     (fixed)
+19991215
+	coff2lod: COFF to LOD converter/uploader added to utilities.
+
+19991209
+	vcc: typedefs and bitfields interfered. As a result the
+	     bitfield extraction (or insertion) code was left out.
+	     (fixed)
+19991208
+	vcc: bitfield assignment masked the wrong bits if the field
+	     start wasn't 0. (fixed)
+	vcc: signed bitfields that were not aligned to the top of their
+	     words used a full register instead of the top half.
+	     This generated an assembly error. (fixed)
+
+19991202
+	vslink: absolute symbols are now supported
+
+19991122
+	vcc: sometimes a register variable/parameter modification
+	     was discarded by a register save/restore operation.
+	     An error message is now generated. (temporary fix)
+	vcc: "*<address> <assign-op> <expr>" sometimes accessed the
+	     wrong memory (Y instead of X) (fixed)
+
+19991119
+	vcc: with "-fno-cpp" remove() was called with a NULL argument (fixed)
+
+===========================================================================
+19991118
+	Distribution v1.0
+---------------------------------------------------------------------------
