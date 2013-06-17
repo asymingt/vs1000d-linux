@@ -1,0 +1,10 @@
+/boot.img
+/coff2boot.bin
+/coff2spiboot.bin
+/flasher.a
+/flasher.bin
+/flasher.o
+/uart.o
+/uartcontrol.a
+/uartcontrol.bin
+/uartcontrol.o
