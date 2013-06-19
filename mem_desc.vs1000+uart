@@ -13,6 +13,6 @@ MEMORY {
 
 CORE {
 	frequency = 12MHz
-	romcode = "vs1000b-lib/player.bin"
+	romcode = "toolchain/include/player.bin"
 }
 

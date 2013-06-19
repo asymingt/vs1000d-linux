@@ -13,6 +13,6 @@ MEMORY {
 
 CORE {
 	frequency = 12MHz
-	romcode = "libit/player.bin"
+	romcode = "toolchain/include/player.bin"
 }
 

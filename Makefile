@@ -21,7 +21,7 @@ VCCFLAGS     = -P130 $(DEBUG) -O -fsmall-code $(FEATURES)
 ASMFLAGS     = -D ASM $(FEATURES)
 
 # Default make target
-all: coff2spiboot.bin coff2boot.bin flasher.bin uartcontrol.bin boot.img
+all: coff2spiboot.bin coff2boot.bin flasher.bin usbspk.bin boot.img
 
 .c.o:
 	$(VCC) $(VCCFLAGS) $(INCDIRS) -o $@ $<
@@ -50,10 +50,10 @@ coff2boot.bin: coff2boot.c
 flasher.bin: $(INCDIR)/c-restart.o flasher.o $(INCDIR)/rom1000.o
 	$(VSLINK) -k -m mem_desc.vs1000 -o $@ $(INCDIR)/c-restart.o flasher.o $(INCDIR)/rom1000.o $(LIBDIRS) $(LIBS)
 
-uartcontrol.bin: uartcontrol.o uart.o
-	$(VSLINK) -k -m mem_desc.vs1000+uart -o $@ $(INCDIR)/c-nand.o uartcontrol.o uart.o $(INCDIR)/rom1000.o $(LIBDIRS) $(LIBS)
+usbspk.bin: usbspk.o uart.o
+	$(VSLINK) -k -m mem_desc.vs1000+uart -o $@ $(INCDIR)/c-nand.o usbspk.o uart.o $(INCDIR)/rom1000.o $(LIBDIRS) $(LIBS)
 
-boot.img: uartcontrol.bin
+boot.img: usbspk.bin
 	$(COFF2BOOT) -t 3 -b 8 -s 19 -w 90 -x 0x50 $< boot.img
 
 flash:
