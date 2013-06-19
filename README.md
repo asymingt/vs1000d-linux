@@ -3,11 +3,14 @@ VS1000D Toolchain for Linux
 
 Overview
 --------
-This is a toolchain for programming the VS1000D library in Linux. It has been tested on Ubuntu 13.04. The VS1000D is a license-free system on chip Ogg-Vorbis player manufactured by [VLSI](http://www.vlsi.fi). The recommended way of programming the VS1000D is using the VSIDE API, offered by VLSI [here](http://www.vlsi.fi/en/support/software/vside.html). However, this assumes that you are running some sort of Windows environment, which may not be the case. The goal of this project is to provide a toolchain to help bootstrap development in Linux.
+This is a toolchain for programming the VS1000D library from Linux. It has been tested on Ubuntu 13.04 using a [Sparkfun VS1000D break-out board](https://www.sparkfun.com/products/8849). The VS1000D is a license-free Ogg-Vorbis chip manufactured by [VLSI](http://www.vlsi.fi). The recommended way of programming the VS1000D is using the VSIDE API, offered by VLSI [here](http://www.vlsi.fi/en/support/software/vside.html). However, this assumes that you are running some sort of Windows environment, or you are prepared to run the application from within a windows emulator, like [WINE](http://www.winehq.com), or within a virtual machine. The goal of this project is to provide a toolchain to help bootstrap development from within a pure Linux environment. One limit is that a USB <-> serial programmer is needed.
 
 This toolchain is the result of merging the following packages:
-* The VSKIT 1.3 from [here](http://www.vlsi.fi/fileadmin/software/VS10XX/vskit130_linux_free_i386.tar.gz)
-* The UART control example from [here](http://www.vlsi.fi/fileadmin/software/VS1000/uartcontrol030.zip)
+
+* The VSKIT 1.3 Linux toolchain from [here](http://www.vlsi.fi/fileadmin/software/VS10XX/vskit130_linux_free_i386.tar.gz)
+* The VSKIT 1.34b from [here](http://www.vlsi.fi/fileadmin/software/VS1000/vskit134b.zip)
+* The uartcontrol.c example from [here](http://www.vlsi.fi/fileadmin/software/VS1000/uartcontrol030.zip)
+* The uspspk.c control example from [here](http://www.vlsi.fi/fileadmin/software/VS1000/usbspk.c)
 
 This code is covered by the VLSI copyright, and I claim no ownership.
 
