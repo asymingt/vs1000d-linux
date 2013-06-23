@@ -12,7 +12,7 @@ This toolchain is the result of merging the following packages:
 * The uartcontrol.c example from [here](http://www.vlsi.fi/fileadmin/software/VS1000/uartcontrol030.zip)
 * The uspspk.c control example from [here](http://www.vlsi.fi/fileadmin/software/VS1000/usbspk.c)
 
-Please note that files in this repository carry files that, although publicly-available from the VLSI website, carry their own respective software license. Please refer the website for further information. 
+Please note that some of the files in this repository are covered by a software license. Please refer the VLSI website for further information. 
 
 <b> Flashing the VS1000D in Linux currently requires a suitable USB <-> Serial interface, like an FTDI cable.</b> I use a [3.3V FTDI breakout](https://www.sparkfun.com/products/9873). This is nice because it breaks out a 5V VCC pin, which can be used to power the VS1000D. If you don't own such a device, you can flash the device over the USB in Windows.
 
